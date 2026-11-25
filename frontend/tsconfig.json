@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    /* Vite ships modern JS to modern browsers - no downlevelling needed. */
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+
+    /*
+     * "bundler" tells TypeScript that Vite resolves imports, so extensionless
+     * imports like `import { api } from './services/api-client'` are valid -
+     * the same way they are in the browser build.
+     */
+    "moduleResolution": "bundler",
+
+    /* React 17+ JSX transform: no `import React` needed in every file. */
+    "jsx": "react-jsx",
+
+    /* Vite app code is type-checked but never emitted by tsc - Vite builds it. */
+    "noEmit": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+
+    /* Interop + DX */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Gives us typed `import.meta.env` and Vite's client types. */
+    "types": ["vite/client"]
+  },
+  "include": ["src", "vite.config.ts"]
+}

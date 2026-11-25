@@ -1,0 +1,16 @@
+/**
+ * STYLE ENTRY POINT
+ * -----------------
+ * Imported once from main.tsx. Order matters and is deliberate:
+ *
+ *   1. tailwindcss - utilities + preflight (CSS reset). Must come first so the
+ *                    app's own rules can override the reset.
+ *   2. theme.css   - the WIREFRAME token block and stage wrappers.
+ *   3. app.css     - component classes that consume those tokens.
+ *
+ * app.css is intentionally unlayered: unlayered CSS wins over Tailwind's
+ * @layer base, which is why our body/background rules beat preflight.
+ */
+@import 'tailwindcss';
+@import './styles/theme.css';
+@import './styles/app.css';

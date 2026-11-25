@@ -1,0 +1,169 @@
+/* ==========================================================================
+   THEME: WIREFRAME
+   Black canvas, white line-art, IBM Plex Mono, zero radius, 1px strokes.
+   Every value below is a design token. Components must never hardcode a
+   colour, font, radius or duration - they read these variables instead, so the
+   entire app can be re-skinned by changing this one block.
+
+   The `--tp-h` hue is declared on <html> in index.html, next to data-theme.
+   ========================================================================== */
+
+/* ---------- Ambient + interaction keyframes used by this app ---------- */
+
+/* The wireframe "vector tunnel" floor: the page grid drifts toward the viewer. */
+@keyframes fx-floor {
+  from { background-position: 0 0; }
+  to   { background-position: 0 64px; }
+}
+
+/* Slow perspective sway on the page stage, given by --tp-3d-web. */
+@keyframes d3-web {
+  0%, 100% { transform: perspective(2400px) rotateX(2.5deg) rotateY(-3deg); }
+  50%      { transform: perspective(2400px) rotateX(1deg) rotateY(3deg) translateY(-4px); }
+}
+
+@keyframes tp-pop {
+  0%   { transform: scale(0.88); opacity: 0; }
+  62%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tp-shake {
+  10%, 90% { transform: translateX(-2px); }
+  30%, 70% { transform: translateX(3px); }
+  50%      { transform: translateX(-4px); }
+}
+
+@keyframes tp-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.42; }
+}
+
+@keyframes tp-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes tp-shimmer {
+  from { background-position: -160% 0; }
+  to   { background-position: 260% 0; }
+}
+
+@keyframes tp-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Respect the OS-level motion preference. The theme ships this, so app code
+   must not re-implement it. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ---------- Stage wrappers ---------- */
+
+/* Desktop/page stage. Carries the slow 3D sway declared by --tp-3d-web. */
+.tp-web-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  animation: var(--tp-3d-web, none);
+  transform-origin: 50% 50%;
+}
+
+/* The FX layer paints the perspective grid. It sits behind content (z-index:-1)
+   and never intercepts clicks. */
+.tp-fx {
+  position: absolute;
+  inset: -40%;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--tp-fx);
+  background-size: var(--tp-fx-size);
+  opacity: var(--tp-fx-op);
+  mix-blend-mode: var(--tp-fx-blend);
+  transform: var(--tp-fx-tf);
+  animation: var(--tp-fx-anim);
+}
+
+.tp-web-stage > .tp-fx {
+  inset: -20%;
+}
+
+/* ---------- THE TOKEN BLOCK ---------- */
+
+[data-theme='wireframe'] {
+  /* FX: a 48px grid, tilted into the distance, drifting toward the viewer. */
+  --tp-fx:
+    linear-gradient(transparent 95%, rgba(255, 255, 255, 0.55) 95%),
+    linear-gradient(90deg, transparent 95%, rgba(255, 255, 255, 0.55) 95%);
+  --tp-fx-size: 48px 48px;
+  --tp-fx-anim: fx-floor 1.6s linear infinite;
+  --tp-fx-op: 0.35;
+  --tp-fx-blend: screen;
+  --tp-fx-tf: perspective(200px) rotateX(70deg) translateY(30%);
+
+  /* Motion */
+  --tp-3d: none;
+  --tp-3d-anim: d3-float 8s ease-in-out infinite;
+  --tp-3d-web: d3-web 14s ease-in-out infinite;
+  --tp-dur: 100ms;
+  --tp-dur-slow: 320ms;
+  --tp-stagger: 70ms;
+  --tp-ease: linear;
+  --tp-press: 0.95;
+
+  /* Imagery (no photos in this app - dashboard is typographic) */
+  --tp-img-r: 16px;
+  --tp-img-frame: 1px solid #fff;
+  --tp-img-sh: none;
+  --tp-img-filter: grayscale(1) contrast(1.8) invert(0);
+  --tp-img-overlay-op: 0;
+  --tp-img-blend: normal;
+  --tp-img-tilt: 0deg;
+  --tp-img-ar: 4 / 5;
+
+  /* Surfaces */
+  --tp-bg: #000000;
+  --tp-canvas: #000000;
+  --tp-surf: #0b0b0b;
+  --tp-surf-2: #161616;
+
+  /* Ink */
+  --tp-ink: #ffffff;
+  --tp-mute: #9a9a9a;
+
+  /* Accent - pure white on this theme; --tp-h re-hues --tp-acc-2 only */
+  --tp-acc: #ffffff;
+  --tp-acc-2: oklch(0.8 0.16 calc(var(--tp-h) + 140));
+  --tp-acc-ink: #000000;
+  --tp-line: #ffffff;
+  --tp-grad: linear-gradient(#ffffff, #ffffff);
+
+  /* Form */
+  --tp-r: 0px;
+  --tp-r-sm: 0px;
+  --tp-r-lg: 0px;
+  --tp-r-btn: 0px;
+  --tp-sh: none;
+  --tp-sh-sm: none;
+  --tp-bw: 1px;
+  --tp-tex: none;
+  --tp-blur: none;
+
+  /* Type */
+  --tp-font-display: 'IBM Plex Mono', monospace;
+  --tp-font-body: 'IBM Plex Sans', system-ui;
+  --tp-font-mono: 'IBM Plex Mono', monospace;
+  --tp-w-display: 500;
+  --tp-track-display: -0.03em;
+  --tp-case-display: uppercase;
+  --tp-hero: 62px;
+}
+
+html { scroll-behavior: smooth; }
+
+body { overflow-x: hidden; overflow-y: visible; }
